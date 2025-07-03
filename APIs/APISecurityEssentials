@@ -41,6 +41,7 @@
 - OAuth2 is an open standard for delegated authorization—allowing one application (the client) to access resources on behalf of a user without sharing their credentials (e.g. using Google/Facebook login).
 
 **How it works (high-level):**
+![OAuth2 Flow Diagram](https://ibb.co/JFS9HR87)
 
 1. The user wants to let an app access their data (e.g., calendar, profile) in another system.
 2. The app redirects the user to the authorization server (e.g., Google), where the user logs in and grants permission.
