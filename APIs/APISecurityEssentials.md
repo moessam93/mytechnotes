@@ -42,7 +42,7 @@
 
 **How it works (high-level):**
 
-![OAuth2 Flow Diagram](https://ibb.co/JFS9HR87)
+![OAuth2 Flow Diagram](https://i.ibb.co/M5Jm7DKV/Chat-GPT-Image-Jul-3-2025-12-53-04-PM.png)
 
 1. The user wants to let an app access their data (e.g., calendar, profile) in another system.
 2. The app redirects the user to the authorization server (e.g., Google), where the user logs in and grants permission.
