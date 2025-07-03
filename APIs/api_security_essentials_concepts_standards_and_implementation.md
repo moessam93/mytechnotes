@@ -102,18 +102,92 @@ def read_profile(token: str = Depends(oauth2_scheme)):
 
 ---
 
-## 4. JWT, JWS, JWE (JOSE Family)
+## 4. JWT, JWS, JWE Explained
 
-- **JWT (JSON Web Token):** A compact token format to transmit claims.
-- **JWS (JSON Web Signature):** A signed JWT (integrity, authenticity but not confidential).
-- **JWE (JSON Web Encryption):** An encrypted JWT (confidentiality, optionally signed for integrity).
-- **JOSE (JavaScript Object Signing and Encryption):** The standards family (JWS, JWE, JWK, etc.).
+### **JWT (JSON Web Token)**
 
-|           | Purpose      | Payload readable? | Use Case                    |
-| --------- | ------------ | ----------------- | --------------------------- |
-| JWS (JWT) | Signed       | Yes               | Auth tokens, user claims    |
-| JWE       | Encrypted    | No                | Sensitive/confidential data |
-| JWT       | Token Format | Depends           | Used everywhere             |
+**Definition:**\
+JWT is just a container or format for representing claims securely between two parties.
+
+**What does it do?**
+
+- It can be just encoded, or signed, or encrypted—or both.
+
+**Structure:**
+
+- `header.payload.signature` (if signed/JWS)
+- Or as a compact format if encrypted/JWE
+
+> By itself, “JWT” doesn’t tell you if it’s just signed or also encrypted.
+
+---
+
+### **JWS (JSON Web Signature)**
+
+**Definition:**\
+JWS is a standard for signing data—creating integrity and authenticity but not confidentiality.
+
+**What does it do?**
+
+- Takes a payload, signs it (with symmetric or asymmetric keys), and outputs a JWT.
+- The payload is visible to anyone with the token, but any modification will break the signature.
+
+**Use-case:**\
+Most “JWT” tokens in APIs are actually JWS—signed, not encrypted.
+
+---
+
+### **JWE (JSON Web Encryption)**
+
+**Definition:**\
+JWE is a standard for encrypting data—creating confidentiality (nobody can read the payload except the intended recipient).
+
+**What does it do?**
+
+- Takes a payload, encrypts it (with a public key or a shared key), so only the holder of the private/decryption key can read the claims.
+- You can also sign and then encrypt a JWT (so you have both integrity and confidentiality).
+
+**Use-case:**\
+Used when you want to hide the contents of the token, e.g. sensitive PII, medical data, etc.
+
+---
+
+## **Key Differences Summarized**
+
+|               | **JWS**                      | **JWE**                                       | **JWT**                  |
+| ------------- | ---------------------------- | --------------------------------------------- | ------------------------ |
+| Means         | Signed, not encrypted        | Encrypted (optionally signed)                 | The “format” (container) |
+| Confidential? | ❌ Anyone can read payload    | ✅ Only receiver can read                      | Depends on use           |
+| Integrity?    | ✅ Yes (signature)            | ✅ Yes (if signed before encryption)           | Depends on use           |
+| API use       | Auth tokens, session, claims | Sensitive info, very rare in typical API auth | Used everywhere          |
+
+---
+
+## **How to Answer in an Interview**
+
+> **"JWT stands for JSON Web Token, which is just a format—a compact way to represent claims as a string. There are two main types: JWS and JWE. JWS stands for JSON Web Signature, which means the token is signed, so you get integrity and authenticity, but the payload is still readable by anyone. Most JWTs used in authentication are JWS.
+>
+> JWE, on the other hand, stands for JSON Web Encryption, which means the token is encrypted, so only the intended recipient can read the payload. You can even combine them—sign, then encrypt—to get both integrity and confidentiality.
+>
+> In summary: JWS = signed (integrity), JWE = encrypted (confidential), JWT = the format that can be used for either or both."**
+
+---
+
+## **Bonus: When to Use Each?**
+
+**JWT (Format Only):**\
+When you need a standard, compact, and self-contained way to represent claims that can be signed and/or encrypted. JWT on its own is just the format—it becomes useful with JWS or JWE depending on your use case.
+
+**JWS (Signed JWT):**\
+Use for API auth, sessions, user claims—when you want anyone with the secret/public key to verify, but you don’t care if the data is visible.
+
+**JWE (Encrypted JWT):**\
+Use when you’re transmitting sensitive data, and you want only the recipient to be able to read it.
+
+---
+
+
+
 
 ---
 
@@ -152,6 +226,3 @@ def read_profile(token: str = Depends(oauth2_scheme)):
 - **Refresh Tokens:** Best for modern APIs, mobile apps, and microservices—stateless and secure if handled right.
 
 ---
-
-**End of Document**
-
